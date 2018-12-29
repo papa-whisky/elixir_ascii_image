@@ -10,24 +10,13 @@ defmodule ElixirAsciiImage do
   ## Examples
 
       iex> ElixirAsciiImage.asciify(img_path)
-      Successfully constructed ASCII matrix!
-      ASCII matrix size: 640 x 480
-      Iterating through pixel ASCII characters:
-      Q
-      #
-      }
-      # etc...
+      # => Prints ASCII-ified version of image at img_path to standard output
       :ok
 
   """
   def asciify(img_path) do
-    img_info = img_info(img_path)
-    IO.puts "Successfully constructed ASCII matrix!"
-    IO.puts "ASCII matrix size: #{img_info.width} x #{img_info.height}"
-    IO.puts "Iterating through pixel ASCII characters:"
-
     Enum.each ascii_matrix(img_path), fn row ->
-      Enum.each row, &(IO.puts &1)
+      IO.puts Enum.join(row)
     end
   end
 
