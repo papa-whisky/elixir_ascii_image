@@ -2,7 +2,7 @@ defmodule ElixirAsciiImage do
   @moduledoc """
   Documentation for ElixirAsciiImage.
   """
-  @ascii_list "`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"
+  @ascii_list "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~i!lI;:,\"^`"
 
   @doc """
   Asciify an image
@@ -49,11 +49,12 @@ defmodule ElixirAsciiImage do
   defp brightness_to_ascii(value) do
     fraction = value / 255
     character_index = round(65 * fraction) - 1
-    String.slice @ascii_list, character_index, 1
+    character = String.slice(@ascii_list, character_index, 1)
+    Enum.join [character, character, character]
   end
 
   defp pixel_matrix(img_path) do
-    {raw_pixel_data, 0} = System.cmd("magick", [img_path, "sparse-color:"])
+    {raw_pixel_data, 0} = System.cmd("magick", [img_path, "-resize", "250", "sparse-color:"])
 
     raw_pixel_data
     |> String.split
