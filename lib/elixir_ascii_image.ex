@@ -9,10 +9,11 @@ defmodule ElixirAsciiImage do
   ## Examples
 
       iex> ElixirAsciiImage.hello()
-      :world
+      Hello, world!
+      :ok
 
   """
   def hello do
-    :world
+    IO.puts("Hello, world!")
   end
 end
