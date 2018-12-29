@@ -9,27 +9,40 @@ defmodule ElixirAsciiImage do
   ## Examples
 
       iex> ElixirAsciiImage.asciify(img_path)
-      Successfully loaded image!
-      Image size: 640 x 480
+      Successfully constructed brightness matrix!
+      Brightness matrix size: 640 x 480
+      Iterating through pixel brightnesses:
+      68
+      12
+      # etc...
       :ok
 
   """
   def asciify(img_path) do
     img_info = img_info(img_path)
-    IO.puts "Successfully constructed pixel matrix!"
-    IO.puts "Pixel matrix size: #{img_info.width} x #{img_info.height}"
-    IO.puts "Iterating through pixel contents:"
+    IO.puts "Successfully constructed brightness matrix!"
+    IO.puts "Brightness matrix size: #{img_info.width} x #{img_info.height}"
+    IO.puts "Iterating through pixel brightnesses:"
 
-    Enum.each pixel_matrix(img_path), fn row ->
-      Enum.each row, fn pixel ->
-        IO.puts "(#{Enum.join(Tuple.to_list(pixel), ", ")})"
-      end
+    Enum.each brightness_matrix(img_path), fn row ->
+      Enum.each row, &(IO.puts &1)
     end
   end
 
   defp img_info(img_path) do
     img = Mogrify.open(img_path)
     img |> Mogrify.verbose
+  end
+
+  defp brightness_matrix(img_path) do
+    pixel_matrix(img_path)
+    |> Enum.map(&row_brightness/1)
+  end
+
+  defp row_brightness(row) do
+    row
+    |> Enum.map(&(Enum.sum(&1) / 3))
+    |> Enum.map(&round/1)
   end
 
   defp pixel_matrix(img_path) do
@@ -64,6 +77,5 @@ defmodule ElixirAsciiImage do
     |> String.slice(5..-2)
     |> String.split(",")
     |> Enum.map(&String.to_integer/1)
-    |> List.to_tuple
   end
 end
